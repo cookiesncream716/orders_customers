@@ -33,7 +33,15 @@
 		 		};
 		 		factory.create = function(customer, callback){
 		 			$http.post('/customers', customer).success(function(output){
-		 				callback();
+		 				if(output.message != undefined){
+		 					console.log('error' + output.message);
+		 					callback(output);
+		 				} else{
+		 					console.log('factory not error')
+		 					console.log(output.message + "here")
+		 					callback();
+		 					
+		 				}
 		 			});
 		 		};
 		 		factory.destroy = function(index, callback){
@@ -69,9 +77,15 @@
 		 		$scope.createCustomer = function(){
 		 			customerFactory.create($scope.newCustomer, function(data){
 		 				$scope.newCustomer = {};
-		 				customerFactory.index(function(data){
-		 					$scope.customers = data;
-		 				});
+		 				console.log('factory data' + data)
+		 				if(data == undefined){
+		 					console.log('controller no error')
+		 					customerFactory.index(function(data){
+		 						$scope.customers = data;
+		 					})
+		 				} else {
+		 					$scope.error = data.message;
+			 			};
 		 			});
 		 		};
 		 		$scope.deleteCustomer = function($index){

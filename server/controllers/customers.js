@@ -8,19 +8,19 @@ module.exports = (function(){
 				if(err){
 					console.log('error finding customers');
 				} else{
-					console.log('found customers');
+					// console.log('found customers');
 					res.json(results);
 				};
 			});
 		},
 		create: function(req, res){
-			console.log('made it to create');
 			var customer = new Customer({name: req.body.name});
 			customer.save(function(err, results){
 				if(err){
-					console.log('error saving customer' + customer.errors);
+					console.log('error saving customer' + err.message);
+					res.json(err);
 				} else{
-					console.log('saved customer');
+					// console.log('saved customer');
 					res.json(results);
 				};
 			});
@@ -30,7 +30,7 @@ module.exports = (function(){
 				if(err){
 					console.log('error deleting customer');
 				} else{
-					console.log('deleted customer');
+					// console.log('deleted customer');
 					res.json(results);
 				}
 			})

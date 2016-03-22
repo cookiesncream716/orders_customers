@@ -8,7 +8,7 @@ module.exports = (function(){
 				if(err){
 					console.log('err retrieving orders' + err);
 				} else{
-					console.log('retrieved orders');
+					// console.log('retrieved orders');
 					res.json(results);
 				}
 			});
@@ -19,7 +19,7 @@ module.exports = (function(){
 				if(err){
 					console.log('error saving order' + order.errors);
 				} else{
-					console.log('order saved');
+					// console.log('order saved');
 					res.json(results);
 				}
 			});
