@@ -7,10 +7,67 @@
 		 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular.min.js"></script>
 		 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.5/angular-route.min.js"></script>
 		 <script>
+		 	var myApp = angular.module('myApp', ['ngRoute']);
+
+		 	myApp.config(function($routeProvider){
+		 		$routeProvider
+		 			.when('/', {
+		 				templateUrl: 'partials/orders.html'
+		 			})
+		 			.when('/customers', {
+		 				templateUrl: 'partials/customers.html'
+		 			})
+		 			.otherwise({
+		 				redirectTo: '/'
+		 			});
+		 	});
+
+		 	myApp.factory('customerFactory', function($http){
+		 		var customers = [];
+		 		var factory = {};
+		 		factory.index = function(callback){
+		 			$http.get('/customers').success(function(output){
+		 				customers = output;
+		 				callback(customers);
+		 			});
+		 		}
+		 		factory.create = function(customer, callback){
+		 			$http.post('/customers', customer).success(function(output){
+		 				callback();
+		 			});
+		 		};
+		 		return factory;
+		 	});
+
+		 	myApp.factory('orderFactory', function($http){
+		 		var orders = [];
+		 		var factory = {};
+		 		return factory;
+		 	});
+
+		 	myApp.controller('customersController', function($scope, customerFactory){
+		 		customerFactory.index(function(data){
+		 			$scope.customers = data;
+		 		})
+		 		$scope.createCustomer = function(){
+		 			customerFactory.create($scope.newCustomer, function(data){
+		 				$scope.newCustomer = {};
+		 				customerFactory.index(function(data){
+		 					$scope.customers = data;
+		 				})
+		 			});
+		 		}
+		 	});
+
+		 	myApp.controller('ordersController', function($scope, orderFactory){
+
+		 	});
+
 		 </script>
 	</head>
 	<body ng-app='myApp'>
 		<div class='container'>
+			 <a href="#/">Orders</a> | <a href="#/customers">Customers</a>
 			<div ng-view=''>
 			</div>
 		</div>
