@@ -30,9 +30,15 @@
 		 				customers = output;
 		 				callback(customers);
 		 			});
-		 		}
+		 		};
 		 		factory.create = function(customer, callback){
 		 			$http.post('/customers', customer).success(function(output){
+		 				callback();
+		 			});
+		 		};
+		 		factory.destroy = function(index, callback){
+		 			var id = customers[index]._id;
+		 			$http.delete('/customers/' + id).success(function(output){
 		 				callback();
 		 			});
 		 		};
@@ -42,6 +48,17 @@
 		 	myApp.factory('orderFactory', function($http){
 		 		var orders = [];
 		 		var factory = {};
+		 		factory.index = function(callback){
+		 			$http.get('/orders').success(function(output){
+		 				orders = output;
+		 				callback(orders);
+		 			});
+		 		};
+		 		factory.create = function(order, callback){
+		 			$http.post('/orders', order).success(function(output){
+		 				callback();
+		 			});
+		 		};
 		 		return factory;
 		 	});
 
@@ -54,13 +71,36 @@
 		 				$scope.newCustomer = {};
 		 				customerFactory.index(function(data){
 		 					$scope.customers = data;
-		 				})
+		 				});
 		 			});
-		 		}
+		 		};
+		 		$scope.deleteCustomer = function($index){
+		 			customerFactory.destroy($index, function(data){
+		 				customerFactory.index(function(data){
+		 					$scope.customers = data;
+		 				});
+		 			});
+		 		};
 		 	});
 
-		 	myApp.controller('ordersController', function($scope, orderFactory){
-
+		 	myApp.controller('ordersController', function($scope, orderFactory, customerFactory){
+		 		$scope.products = ['flip flops', 'Nike running shoes', 'black sandals', 'cowboy boots', 'slippers', 'pink heels'];
+		 		customerFactory.index(function(data){
+		 			$scope.customers = data;
+		 		});
+		 		orderFactory.index(function(data){
+		 			// console.log('got orders' + data);
+		 			$scope.orders = data;
+		 		});
+		 		$scope.createOrder = function(){
+		 			// console.log($scope.newOrder.customer)
+		 			orderFactory.create($scope.newOrder, function(data){
+		 				$scope.newOrder = {};
+		 				orderFactory.index(function(data){
+		 					$scope.orders = data;
+		 				});
+		 			});
+		 		}
 		 	});
 
 		 </script>

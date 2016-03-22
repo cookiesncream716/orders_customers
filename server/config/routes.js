@@ -8,4 +8,13 @@ module.exports = function(app){
 	app.post('/customers', function(req, res){
 		customers.create(req, res);
 	});
+	app.delete('/customers/:id', function(req, res){
+		customers.destroy(req, res);
+	});
+	app.get('/orders', function(req, res){
+		orders.index(req, res);
+	});
+	app.post('/orders', function(req, res){
+		orders.create(req, res);
+	});
 }

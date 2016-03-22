@@ -24,6 +24,16 @@ module.exports = (function(){
 					res.json(results);
 				};
 			});
+		},
+		destroy: function(req, res){
+			Customer.remove({_id: req.params.id}, function(err, results){
+				if(err){
+					console.log('error deleting customer');
+				} else{
+					console.log('deleted customer');
+					res.json(results);
+				}
+			})
 		}
 	}
 })();
